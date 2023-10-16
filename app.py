@@ -14,10 +14,16 @@ def index():
         if not csv_file.filename.endswith('.csv'):
             return "Please upload a CSV file", 400
 
-        # Read CSV content into a pandas DataFrame
-        df = pd.read_csv(csv_file)
+        try:
+            # Try reading the CSV content with a different encoding if UTF-8 fails
+            df = pd.read_csv(csv_file, encoding='utf-8')
+        except UnicodeDecodeError:
+            try:
+                df = pd.read_csv(csv_file, encoding='latin1')
+            except Exception as e:
+                return str(e), 400
 
-        # Process the CSV data as per your original PowerShell script
+        # Process the CSV data
         df['ActualStartDate'] = pd.to_datetime(df['u_actual_start'], format='%d-%m-%Y').dt.date
         daily_totals = df.groupby('ActualStartDate')['time_worked'].sum().reset_index()
 
