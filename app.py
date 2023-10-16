@@ -14,20 +14,18 @@ def index():
         if not csv_file.filename.endswith('.csv'):
             return "Please upload a CSV file", 400
 
+        # Read the CSV content with specific encoding and handling bad lines
         try:
-            # Try reading the CSV content with a different encoding if UTF-8 fails
-            df = pd.read_csv(csv_file, encoding='utf-8')
-        except UnicodeDecodeError:
-            try:
-                df = pd.read_csv(csv_file, encoding='latin1')
-            except Exception as e:
-                return str(e), 400
+            df = pd.read_csv(csv_file, encoding='ISO-8859-1', error_bad_lines=False)
+        except Exception as e:
+            return str(e), 400
 
         # Process the CSV data
-        df['ActualStartDate'] = pd.to_datetime(df['u_actual_start'], format='%d-%m-%Y').dt.date
+        df['u_actual_start'] = pd.to_datetime(df['u_actual_start'], errors='coerce', format='%d-%m-%Y %H:%M:%S')
+        df['ActualStartDate'] = df['u_actual_start'].dt.date
         daily_totals = df.groupby('ActualStartDate')['time_worked'].sum().reset_index()
 
-        df['Week'] = pd.to_datetime(df['u_actual_start'], format='%d-%m-%Y').dt.strftime('%U')
+        df['Week'] = df['u_actual_start'].dt.strftime('%U')
         weekly_totals = df.groupby('Week')['time_worked'].sum().reset_index()
 
     return render_template('upload.html', daily_totals=daily_totals.to_dict(orient='records') if daily_totals is not None else None, weekly_totals=weekly_totals.to_dict(orient='records') if weekly_totals is not None else None)
