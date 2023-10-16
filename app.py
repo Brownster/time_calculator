@@ -4,6 +4,11 @@ import io
 
 app = Flask(__name__)
 
+def seconds_to_hours_minutes(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    return f"{hours} hours {minutes} minutes"
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     daily_totals = None
@@ -23,13 +28,16 @@ def index():
         # Process the CSV data
         df['u_actual_start'] = pd.to_datetime(df['u_actual_start'], errors='coerce', format='%d-%m-%Y %H:%M:%S')
         df['ActualStartDate'] = df['u_actual_start'].dt.date
-        daily_totals = df.groupby('ActualStartDate')['time_worked'].sum().reset_index()
+        daily = df.groupby('ActualStartDate')['time_worked'].sum().reset_index()
+        daily['time_worked'] = daily['time_worked'].apply(seconds_to_hours_minutes)
+        daily_totals = daily.to_dict(orient='records')
 
         df['Week'] = df['u_actual_start'].dt.strftime('%U')
-        weekly_totals = df.groupby('Week')['time_worked'].sum().reset_index()
+        weekly = df.groupby('Week')['time_worked'].sum().reset_index()
+        weekly['time_worked'] = weekly['time_worked'].apply(seconds_to_hours_minutes)
+        weekly_totals = weekly.to_dict(orient='records')
 
-    return render_template('upload.html', daily_totals=daily_totals.to_dict(orient='records') if daily_totals is not None else None, weekly_totals=weekly_totals.to_dict(orient='records') if weekly_totals is not None else None)
-
+    return render_template('upload.html', daily_totals=daily_totals, weekly_totals=weekly_totals)
 
 if __name__ == '__main__':
     app.run(debug=True)
