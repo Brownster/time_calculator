@@ -1,39 +1,78 @@
 <!doctype html>
-<title>Upload CSV</title>
-<h1>Upload CSV File</h1>
-<form method=post enctype=multipart/form-data>
-  <input type=file name=file>
-  <input type=submit value=Upload>
-</form>
+<html lang="en">
 
-{% if daily_totals %}
-<h2>Daily Totals</h2>
-<table border="1">
-    <tr>
-        <th>Date</th>
-        <th>Time Worked</th>
-    </tr>
-    {% for row in daily_totals %}
-    <tr>
-        <td>{{ row['ActualStartDate'] }}</td>
-        <td>{{ row['time_worked'] }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV</title>
+    <style>
+        /* Including the CSS styles directly in the HTML file */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('background.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+        }
 
-{% if weekly_totals %}
-<h2>Weekly Totals</h2>
-<table border="1">
-    <tr>
-        <th>Week</th>
-        <th>Time Worked</th>
-    </tr>
-    {% for row in weekly_totals %}
-    <tr>
-        <td>{{ row['Week'] }}</td>
-        <td>{{ row['time_worked'] }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+
+        .banner-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Upload CSV File</h1>
+        <form method=post enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+        </form>
+
+        {% if daily_totals %}
+        <h2>Daily Totals</h2>
+        <table border="1">
+            <tr>
+                <th>Date</th>
+                <th>Time Worked</th>
+            </tr>
+            {% for row in daily_totals %}
+            <tr>
+                <td>{{ row['ActualStartDate'] }}</td>
+                <td>{{ row['time_worked'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        
+        {% if weekly_totals %}
+        <h2>Weekly Totals</h2>
+        <table border="1">
+            <tr>
+                <th>Week</th>
+                <th>Time Worked</th>
+            </tr>
+            {% for row in weekly_totals %}
+            <tr>
+                <td>{{ row['Week'] }}</td>
+                <td>{{ row['time_worked'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div> <!-- Closing the container div -->
+</body>
+
+</html>
