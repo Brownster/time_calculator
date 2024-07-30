@@ -5,75 +5,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload CSV</title>
-<style>
-    /* Including the CSS styles directly in the HTML file */
-    body {
-        font-family: 'Arial', sans-serif;
-        background-image: url('{{ url_for('static', filename='background.png') }}');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-attachment: fixed;
-    }
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('{{ url_for('static', filename='background.png') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
-    }
+        .container {
+            max-width: 700px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px;
+            box-sizing: border-box;
+            width: 100%;
+        }
 
-    .banner-image {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 0 auto 20px auto;
-    }
-</style>
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
 
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"],
+        input[type="submit"] {
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Upload CSV File</h1>
-        <form method=post enctype=multipart/form-data>
-            <input type=file name=file>
-            <input type=submit value=Upload>
+        <h1>Upload Timesheet CSV File</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            <!-- File input with tooltip -->
+            <div class="tooltip">
+                <input type="file" name="file" title="Choose a CSV file with your timesheet data.">
+                <span class="tooltiptext">Upload a CSV file containing your timesheet data with appropriate headers.</span>
+            </div>
+
+            <input type="submit" value="Upload">
         </form>
 
         {% if daily_totals %}
         <h2>Daily Totals</h2>
-        <table border="1">
-            <tr>
-                <th>Date</th>
-                <th>Time Worked</th>
-            </tr>
-            {% for row in daily_totals %}
-            <tr>
-                <td>{{ row['ActualStartDate'] }}</td>
-                <td>{{ row['time_worked'] }}</td>
-            </tr>
-            {% endfor %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time Worked</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in daily_totals %}
+                <tr>
+                    <td>{{ row['ActualStartDate'] }}</td>
+                    <td>{{ row['time_worked'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         {% endif %}
-        
+
         {% if weekly_totals %}
         <h2>Weekly Totals</h2>
-        <table border="1">
-            <tr>
-                <th>Week</th>
-                <th>Time Worked</th>
-            </tr>
-            {% for row in weekly_totals %}
-            <tr>
-                <td>{{ row['Week'] }}</td>
-                <td>{{ row['time_worked'] }}</td>
-            </tr>
-            {% endfor %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Time Worked</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in weekly_totals %}
+                <tr>
+                    <td>{{ row['Week'] }}</td>
+                    <td>{{ row['time_worked'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         {% endif %}
-    </div> <!-- Closing the container div -->
+    </div>
 </body>
 
 </html>
