@@ -1,4 +1,8 @@
 Time Calculator
+![image](https://github.com/user-attachments/assets/d27a2da6-27f2-4018-8155-eb3eb9136c0e)
+
+
+
 Introduction
 
 Time Calculator is a simple web application built with Flask and Pandas. It allows users to upload a CSV file, processes the data to calculate the total time worked per day and per week, and displays the results in a neatly formatted table on the webpage.
