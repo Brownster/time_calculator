@@ -16,8 +16,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: auto; /* Allows scrolling on the entire body if needed */
+            min-height: 100vh; /* Changed to min-height to allow expansion */
+            overflow: auto; /* Ensures the entire body can scroll */
             margin: 0;
         }
 
@@ -30,7 +30,8 @@
             margin: 20px;
             box-sizing: border-box;
             width: 100%;
-            overflow: auto; /* Ensures content within container can scroll */
+            overflow: auto; /* Maintains scrollability within the container */
+            max-height: 80vh; /* Restricts container height and allows internal scrolling */
         }
 
         h1, h2 {
@@ -75,7 +76,8 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            overflow: auto; /* Allows the table to scroll independently if it overflows */
+            overflow-y: auto; /* Ensures vertical scrollability */
+            max-height: 400px; /* Sets a maximum height to encourage scrolling */
         }
 
         th, td {
@@ -117,7 +119,6 @@
             visibility: visible;
             opacity: 1;
         }
-
     </style>
 </head>
 
