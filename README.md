@@ -1,61 +1,94 @@
-Time Calculator
+# Time Calculator
+
 ![image](https://github.com/user-attachments/assets/d27a2da6-27f2-4018-8155-eb3eb9136c0e)
 
+## Introduction
 
+Time Calculator is a web application built with Flask and Pandas that helps users analyze their working hours. Upload a ServiceNow timesheet CSV file to automatically calculate and visualize total work time per day and per week.
 
-Introduction
+## Features
 
-Time Calculator is a simple web application built with Flask and Pandas. It allows users to upload a CSV file, processes the data to calculate the total time worked per day and per week, and displays the results in a neatly formatted table on the webpage.
-Features
+- **User-Friendly Interface**: Clean, responsive design with helpful tooltips and guidance
+- **File Upload**: Easily upload CSV files through the web interface
+- **Data Processing**: Calculates total time worked per day and per week
+- **Results Display**: Presents processed data in neatly formatted tables
+- **Error Handling**: Clear error messages for invalid or improperly formatted files
+- **Summary Statistics**: At-a-glance view of total hours, days worked, and weeks logged
+- **Docker Support**: Run as a containerized application
 
-    File Upload: Easily upload CSV files through the web interface.
-    Data Processing: Calculates total time worked per day and per week.
-    Results Display: Displays the processed data in tabular format on the web interface.
+## CSV Requirements
 
-Installation
-Prerequisites
+The application expects CSV files with:
+- `u_actual_start` column in DD-MM-YYYY HH:MM:SS format
+- `time_worked` column containing seconds worked
 
-    Python 3.6 or higher
-    Pip package manager
+Example format:
+```
+u_actual_start,time_worked,other_columns,...
+01-03-2023 09:00:00,3600,data,...
+01-03-2023 14:30:00,5400,data,...
+```
 
-Steps
+## Installation
 
-    Clone the repository:
+### Prerequisites
 
-    sh
+- Python 3.6 or higher
+- Pip package manager
 
-git clone https://github.com/Brownster/time_calculator.git
-cd flask-csv-processor
+### Standard Installation
 
-Install the required packages:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Brownster/time_calculator.git
+   cd time_calculator
+   ```
 
-sh
+2. Install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-pip install -r requirements.txt
+3. Run the Flask app:
+   ```bash
+   python app.py
+   ```
 
-Run the Flask app:
+4. Open a web browser and navigate to `http://127.0.0.1:5000/` to view the app.
 
-sh
+### Docker Installation
 
-    python app.py
+1. Build the Docker image:
+   ```bash
+   docker build -t time-calculator .
+   ```
 
-    Open a web browser and navigate to http://127.0.0.1:5000/ to view the app.
+2. Run the Docker container:
+   ```bash
+   docker run -p 5000:5000 time-calculator
+   ```
 
-Usage
+3. Access the application at `http://localhost:5000`
 
-    Click on the "Upload" button to select a CSV file from your computer. The file should contain at least two columns: u_actual_start for the start date and time_worked for the time worked.
+## Usage
 
-    The application will process the data and display the total time worked per day and per week in tabular format on the webpage.
+1. Open the web application in your browser
+2. Export your timesheet data from ServiceNow as a CSV file
+3. Click "Upload & Calculate" and select your CSV file
+4. View your time summary, including:
+   - Total hours worked
+   - Summary statistics
+   - Daily breakdown of hours
+   - Weekly totals
 
-Contributing
+## Contributing
 
-    Fork the repository on GitHub.
-    Clone your forked repository to your local machine.
-    Create a new branch for your feature or bug fix.
-    Make your changes and commit them to your local repository.
-    Push your changes to your forked repository on GitHub.
-    Create a pull request to merge your changes into the main repository.
+1. Fork the repository on GitHub
+2. Create a new branch for your feature or bug fix
+3. Make your changes and commit them to your local repository
+4. Push your changes to your forked repository on GitHub
+5. Create a pull request to merge your changes into the main repository
 
-License
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
