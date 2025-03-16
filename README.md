@@ -1,6 +1,6 @@
 # Time Calculator
 
-![image](https://github.com/user-attachments/assets/d27a2da6-27f2-4018-8155-eb3eb9136c0e)
+![image](https://github.com/user-attachments/assets/81e9ebdf-14c2-4bcf-b5e1-634d266473bd)
 
 ## Introduction
 
