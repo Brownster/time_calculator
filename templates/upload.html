@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload CSV</title>
+    <title>Time Calculator</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -22,54 +22,101 @@
         }
 
         .container {
-            max-width: 700px;
-            background-color: rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 30px;
             margin: 20px;
             box-sizing: border-box;
             width: 100%;
             overflow: auto; /* Maintains scrollability within the container */
-            max-height: 80vh; /* Restricts container height and allows internal scrolling */
+            max-height: 85vh; /* Restricts container height and allows internal scrolling */
         }
 
-        h1, h2 {
+        h1, h2, h3 {
             text-align: center;
+            color: #2c3e50;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
             font-size: 24px;
             margin-bottom: 20px;
-            color: #333;
+        }
+        
+        h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .help-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #6c757d;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+
+        .help-box h3 {
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .help-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .help-box li {
+            margin-bottom: 8px;
         }
 
         form {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         input[type="file"],
         input[type="submit"] {
-            padding: 10px;
+            padding: 12px;
             width: 100%;
             max-width: 400px;
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         input[type="submit"] {
-            background-color: #333;
+            background-color: #3498db;
             color: white;
             border: none;
             cursor: pointer;
+            font-weight: bold;
         }
 
         input[type="submit"]:hover {
-            background-color: #555;
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         table {
@@ -96,86 +143,203 @@
             position: relative;
             display: inline-block;
             cursor: help;
+            width: 100%;
+            max-width: 400px;
         }
 
         .tooltip .tooltiptext {
             visibility: hidden;
-            width: 200px;
-            background-color: #333;
+            width: 280px;
+            background-color: #34495e;
             color: #fff;
-            text-align: center;
+            text-align: left;
             border-radius: 5px;
-            padding: 10px;
+            padding: 12px;
             position: absolute;
             z-index: 1;
             bottom: 125%;
             left: 50%;
-            margin-left: -100px;
+            margin-left: -140px;
             opacity: 0;
             transition: opacity 0.3s;
+            line-height: 1.4;
+            font-size: 14px;
         }
 
         .tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
         }
+
+        .sample-data {
+            background-color: #f0f7ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Upload Timesheet CSV File</h1>
+        <h1>Time Calculator</h1>
+        <p class="description">Calculate and visualize your total working hours from ServiceNow timesheet data</p>
+
+        <div class="help-box">
+            <h3>How to Use This Tool</h3>
+            <ul>
+                <li>Export your timesheet data from ServiceNow as a CSV file</li>
+                <li>Upload the CSV file using the form below</li>
+                <li>View both daily and weekly time summaries immediately</li>
+            </ul>
+            
+            <h3>Required CSV Format</h3>
+            <ul>
+                <li>Must include <code>u_actual_start</code> column (format: DD-MM-YYYY HH:MM:SS)</li>
+                <li>Must include <code>time_worked</code> column (in seconds)</li>
+            </ul>
+            
+            <div class="sample-data">
+                u_actual_start,time_worked,other_columns,...<br>
+                01-03-2023 09:00:00,3600,data,...<br>
+                01-03-2023 14:30:00,5400,data,...
+            </div>
+        </div>
 
         <form method="post" enctype="multipart/form-data">
             <!-- File input with tooltip -->
             <div class="tooltip">
                 <input type="file" name="file" title="Choose a CSV file with your timesheet data.">
-                <span class="tooltiptext">Upload a CSV file exported from service now time worked.</span>
+                <span class="tooltiptext">
+                    <strong>CSV File Requirements:</strong><br>
+                    • Export from ServiceNow timesheet<br>
+                    • Must contain u_actual_start and time_worked columns<br>
+                    • Data will be processed to show daily and weekly totals
+                </span>
             </div>
 
-            <input type="submit" value="Upload">
+            <input type="submit" value="Upload & Calculate">
         </form>
 
-        {% if daily_totals %}
-        <h2>Daily Totals</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Time Worked</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in daily_totals %}
-                <tr>
-                    <td>{{ row['ActualStartDate'] }}</td>
-                    <td>{{ row['time_worked'] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if error_message %}
+        <div class="error-message" style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin-bottom: 20px; border-left: 4px solid #f5c6cb;">
+            <strong>Error:</strong> {{ error_message }}
+        </div>
         {% endif %}
 
-        {% if weekly_totals %}
-        <h2>Weekly Totals</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Week</th>
-                    <th>Time Worked</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in weekly_totals %}
-                <tr>
-                    <td>{{ row['Week'] }}</td>
-                    <td>{{ row['time_worked'] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if daily_totals or weekly_totals %}
+        <div class="results-container">
+            <div class="results-header">
+                <h2>Your Time Summary</h2>
+                <p class="description">Summary of your working hours calculated from your timesheet data</p>
+            </div>
+            
+            {% if summary %}
+            <div class="summary-box" style="background-color: #e8f4fd; padding: 15px; border-radius: 5px; margin-bottom: 20px; display: flex; justify-content: space-around; flex-wrap: wrap;">
+                <div class="summary-item" style="text-align: center; padding: 10px;">
+                    <div style="font-size: 24px; font-weight: bold; color: #3498db;">{{ summary.total_hours }}h {{ summary.total_minutes }}m</div>
+                    <div style="font-size: 14px; color: #6c757d;">Total Time</div>
+                </div>
+                <div class="summary-item" style="text-align: center; padding: 10px;">
+                    <div style="font-size: 24px; font-weight: bold; color: #3498db;">{{ summary.total_days }}</div>
+                    <div style="font-size: 14px; color: #6c757d;">Days Worked</div>
+                </div>
+                <div class="summary-item" style="text-align: center; padding: 10px;">
+                    <div style="font-size: 24px; font-weight: bold; color: #3498db;">{{ summary.total_weeks }}</div>
+                    <div style="font-size: 14px; color: #6c757d;">Weeks Logged</div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if daily_totals %}
+            <div class="result-section">
+                <h3>Daily Totals</h3>
+                <div class="tooltip" style="max-width: 20px; display: inline-block; vertical-align: middle; margin-left: 5px;">
+                    <span style="font-size: 16px; color: #6c757d;">ⓘ</span>
+                    <span class="tooltiptext">
+                        Shows the total time worked for each day in your timesheet
+                    </span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time Worked</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in daily_totals %}
+                        <tr>
+                            <td>{{ row['ActualStartDate'] }}</td>
+                            <td>{{ row['time_worked'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            {% if weekly_totals %}
+            <div class="result-section">
+                <h3>Weekly Totals</h3>
+                <div class="tooltip" style="max-width: 20px; display: inline-block; vertical-align: middle; margin-left: 5px;">
+                    <span style="font-size: 16px; color: #6c757d;">ⓘ</span>
+                    <span class="tooltiptext">
+                        Shows the total time worked for each week (based on week number in the year)
+                    </span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Week Number</th>
+                            <th>Time Worked</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in weekly_totals %}
+                        <tr>
+                            <td>{{ row['Week'] }}</td>
+                            <td>{{ row['time_worked'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="empty-state" style="text-align: center; margin-top: 30px;">
+            <p style="color: #6c757d; font-style: italic;">Upload a CSV file to see your time summary</p>
+        </div>
         {% endif %}
+        
+        <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #6c757d;">
+            <p>Time Calculator v1.0 | <a href="https://github.com/Brownster/time_calculator" style="color: #3498db; text-decoration: none;">GitHub</a></p>
+        </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add a loading state when form is submitted
+        const form = document.querySelector('form');
+        const submitButton = form.querySelector('input[type="submit"]');
+        
+        form.addEventListener('submit', function() {
+            submitButton.value = 'Processing...';
+            submitButton.disabled = true;
+            
+            // Create and append a loading message
+            const loadingMsg = document.createElement('p');
+            loadingMsg.textContent = 'Processing your file, please wait...';
+            loadingMsg.style.color = '#3498db';
+            loadingMsg.style.textAlign = 'center';
+            form.appendChild(loadingMsg);
+        });
+    });
+    </script>
 </body>
 
 </html>
